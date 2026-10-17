@@ -1,700 +1,2472 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#0b0d14">
-  <meta name="description" content="Naol Music Studio 3D — browser-based multitrack audio recording, editing and mixing studio.">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="theme-color"
+    content="#090b12"
+  >
+
+  <meta
+    name="description"
+    content="Naol Music Studio 3D — browser-based multitrack audio editing, recording, mixing and mastering studio."
+  >
+
   <title>Naol Music Studio 3D</title>
+
   <link rel="stylesheet" href="style.css">
+
+  <script src="script.js" defer></script>
 </head>
+
 <body>
-  <div class="app-shell" id="app">
+
+  <!-- =====================================================
+       APP SHELL
+       ===================================================== -->
+
+  <div class="studio-app" id="app">
 
     <!-- TOP BAR -->
-    <header class="topbar">
-      <a href="#" class="brand" aria-label="Naol Music Studio home">
-        <span class="brand-logo">N<span>3D</span></span>
-        <span class="brand-copy">
-          <strong>NAOL</strong>
-          <small>MUSIC STUDIO 3D</small>
-        </span>
-      </a>
 
-      <div class="project-title">
-        <input id="projectName" type="text" value="My Music Project"
-          aria-label="Project name" maxlength="100">
-        <span id="saveStatus" class="save-status">Ready</span>
+    <header class="topbar">
+
+      <div class="brand-area">
+
+        <div class="brand-logo">
+          <span class="logo-symbol">N</span>
+          <span class="logo-glow"></span>
+        </div>
+
+        <div class="brand-copy">
+          <h1>NAOL<span>STUDIO</span></h1>
+          <p>3D AUDIO WORKSTATION</p>
+        </div>
+
+      </div>
+
+      <div class="project-area">
+
+        <div class="project-name-wrap">
+
+          <label for="projectName">
+            PROJECT
+          </label>
+
+          <input
+            type="text"
+            id="projectName"
+            value="My Music Project"
+            maxlength="100"
+            autocomplete="off"
+          >
+
+        </div>
+
+        <span
+          class="save-status"
+          id="saveStatus"
+          aria-live="polite"
+        >
+          ● Ready
+        </span>
+
       </div>
 
       <div class="topbar-actions">
-        <button id="undoBtn" class="icon-button" type="button" title="Undo">↶</button>
-        <button id="redoBtn" class="icon-button" type="button" title="Redo">↷</button>
-        <button id="saveProjectBtn" class="button button-secondary" type="button">Save Project</button>
-        <button id="exportTopBtn" class="button button-primary" type="button">Export</button>
+
+        <button
+          type="button"
+          class="icon-button"
+          id="undoBtn"
+          title="Undo"
+          aria-label="Undo"
+        >
+          ↶
+        </button>
+
+        <button
+          type="button"
+          class="icon-button"
+          id="redoBtn"
+          title="Redo"
+          aria-label="Redo"
+        >
+          ↷
+        </button>
+
+        <button
+          type="button"
+          class="button button-secondary"
+          id="saveProjectBtn"
+        >
+          Save Project
+        </button>
+
       </div>
+
     </header>
 
-    <!-- MAIN NAVIGATION -->
-    <nav class="main-nav" aria-label="Studio sections">
-      <button class="nav-item active" data-section="editorSection" type="button">Editor</button>
-      <button class="nav-item" data-section="voiceSection" type="button">Voice Record</button>
-      <button class="nav-item" data-section="keyboardSection" type="button">Keyboard</button>
-      <button class="nav-item" data-section="mixerSection" type="button">Mixer & FX</button>
-      <button class="nav-item" data-section="exportSection" type="button">Export</button>
+
+    <!-- ===================================================
+         MAIN NAVIGATION
+         =================================================== -->
+
+    <nav class="main-nav" aria-label="Studio navigation">
+
+      <button
+        type="button"
+        class="nav-item active"
+        data-section="editorSection"
+      >
+        <span>▤</span>
+        Editor
+      </button>
+
+      <button
+        type="button"
+        class="nav-item"
+        data-section="voiceSection"
+      >
+        <span>🎙</span>
+        Voice Record
+      </button>
+
+      <button
+        type="button"
+        class="nav-item"
+        data-section="keyboardSection"
+      >
+        <span>▥</span>
+        Keyboard
+      </button>
+
+      <button
+        type="button"
+        class="nav-item"
+        data-section="mixerSection"
+      >
+        <span>🎚</span>
+        Mixer
+      </button>
+
+      <button
+        type="button"
+        class="nav-item"
+        data-section="effectsSection"
+      >
+        <span>✦</span>
+        Effects
+      </button>
+
+      <button
+        type="button"
+        class="nav-item"
+        data-section="exportSection"
+      >
+        <span>⇧</span>
+        Export
+      </button>
+
     </nav>
+
+
+    <!-- ===================================================
+         MAIN WORKSPACE
+         =================================================== -->
 
     <main class="studio-main">
 
-      <!-- EDITOR -->
-      <section class="studio-section" id="editorSection">
-        <div class="section-heading">
-          <div>
-            <span class="eyebrow">MULTITRACK WORKSPACE</span>
-            <h1>Audio Editor</h1>
-            <p>Import audio, arrange tracks, edit and mix your sound.</p>
-          </div>
+      <!-- LEFT SIDEBAR -->
 
-          <label class="button button-primary upload-button" for="audioUpload">
-            <span>＋</span> Import Audio
-          </label>
-          <input id="audioUpload" type="file"
-            accept="audio/*,.wav,.mp3,.m4a,.ogg,.flac,.aac,.webm"
-            multiple hidden>
+      <aside class="left-sidebar">
+
+        <div class="sidebar-heading">
+          <span class="status-dot"></span>
+          <span>MEDIA LIBRARY</span>
         </div>
 
-        <div class="workspace-grid">
-          <div class="editor-center">
+        <label
+          class="upload-drop-zone"
+          id="uploadDropZone"
+          for="audioUpload"
+        >
 
-            <!-- AUDIO PREVIEW -->
-            <section class="panel preview-panel">
-              <div class="panel-header">
-                <div>
-                  <span class="eyebrow">AUDIO MONITOR</span>
-                  <h2 id="currentTrackTitle">No audio loaded</h2>
-                </div>
-                <span id="playbackBadge" class="status-pill">READY</span>
+          <span class="upload-icon">＋</span>
+
+          <strong>Import Audio</strong>
+
+          <span>
+            MP3, WAV, M4A, OGG, WebM
+          </span>
+
+          <span class="upload-hint">
+            Tap or choose a file
+          </span>
+
+        </label>
+
+        <input
+          type="file"
+          id="audioUpload"
+          accept="audio/*,.wav,.mp3,.m4a,.aac,.ogg,.flac,.webm,.opus"
+          hidden
+        >
+
+        <button
+          type="button"
+          class="button button-secondary full-width"
+          id="addTrackBtn"
+        >
+          ＋ Add Recorded Track
+        </button>
+
+        <div class="sidebar-section-title">
+          PROJECT TRACKS
+        </div>
+
+        <div
+          class="track-list"
+          id="trackList"
+          aria-live="polite"
+        >
+
+          <div class="empty-track-message">
+            Import audio or record a new track.
+          </div>
+
+        </div>
+
+        <div class="sidebar-footer">
+
+          <div class="sidebar-info-row">
+            <span>Engine</span>
+            <strong id="engineStatus">Ready</strong>
+          </div>
+
+          <div class="sidebar-info-row">
+            <span>Audio</span>
+            <strong id="audioStatus">No audio</strong>
+          </div>
+
+          <div class="sidebar-info-row">
+            <span>Project</span>
+            <strong id="projectState">Unsaved</strong>
+          </div>
+
+        </div>
+
+      </aside>
+
+
+      <!-- =================================================
+           EDITOR CONTENT
+           ================================================= -->
+
+      <div class="workspace-content">
+
+
+        <!-- EDITOR SECTION -->
+
+        <section
+          class="studio-section editor-section"
+          id="editorSection"
+        >
+
+          <div class="section-heading">
+
+            <div>
+              <div class="eyebrow">
+                MULTITRACK WORKSPACE
               </div>
 
-              <canvas id="visualizer" class="visualizer" aria-label="Live audio visualizer"></canvas>
+              <h2>Audio Editor</h2>
 
-              <div class="transport">
-                <button id="restartBtn" class="transport-button" type="button" title="Restart">↺</button>
-                <button id="stopBtn" class="transport-button" type="button" title="Stop">■</button>
-                <button id="playBtn" class="transport-button transport-play" type="button" title="Play">▶</button>
-                <button id="pauseBtn" class="transport-button" type="button" title="Pause">Ⅱ</button>
+              <p>
+                Record, edit, arrange and mix your sound.
+              </p>
+            </div>
 
-                <div class="time-readout">
-                  <span id="timeDisplay">00:00.00 / 00:00.00</span>
+            <div class="heading-actions">
+
+              <button
+                type="button"
+                class="button button-secondary"
+                id="backupProjectBtn"
+              >
+                Backup
+              </button>
+
+              <label
+                class="button button-secondary file-label"
+                for="restoreProjectInput"
+              >
+                Restore
+              </label>
+
+              <input
+                type="file"
+                id="restoreProjectInput"
+                accept=".json,.naolproject"
+                hidden
+              >
+
+            </div>
+
+          </div>
+
+
+          <!-- CURRENT TRACK -->
+
+          <div class="current-track-card">
+
+            <div class="current-track-art">
+
+              <div class="album-art-symbol">
+                ♪
+              </div>
+
+            </div>
+
+            <div class="current-track-details">
+
+              <span class="eyebrow">
+                SELECTED AUDIO
+              </span>
+
+              <h3 id="currentTrackTitle">
+                No audio selected
+              </h3>
+
+              <p id="audioFormat">
+                Import a file to begin editing.
+              </p>
+
+              <div class="track-status-row">
+
+                <span
+                  class="status-pill"
+                  id="playbackBadge"
+                >
+                  READY
+                </span>
+
+                <span id="trackDurationText">
+                  00:00
+                </span>
+
+              </div>
+
+            </div>
+
+            <div class="track-wave-preview">
+
+              <canvas
+                id="visualizer"
+                aria-label="Live audio visualizer"
+              ></canvas>
+
+            </div>
+
+          </div>
+
+
+          <!-- TRANSPORT BAR -->
+
+          <div class="transport-panel">
+
+            <div class="transport-buttons">
+
+              <button
+                type="button"
+                class="transport-button"
+                id="restartBtn"
+                title="Restart"
+                aria-label="Restart"
+              >
+                ↺
+              </button>
+
+              <button
+                type="button"
+                class="transport-button transport-stop"
+                id="stopBtn"
+                title="Stop"
+                aria-label="Stop playback"
+              >
+                ■
+              </button>
+
+              <button
+                type="button"
+                class="transport-button transport-play"
+                id="playBtn"
+                title="Play"
+                aria-label="Play audio"
+              >
+                ▶
+              </button>
+
+            </div>
+
+            <div class="transport-timeline">
+
+              <div class="time-readout">
+
+                <span id="timeDisplay">
+                  00:00.00
+                </span>
+
+                <span class="time-separator">/</span>
+
+                <span id="durationDisplay">
+                  00:00.00
+                </span>
+
+              </div>
+
+              <input
+                type="range"
+                id="seekBar"
+                min="0"
+                max="1000"
+                value="0"
+                step="1"
+                aria-label="Seek audio"
+              >
+
+            </div>
+
+            <div class="transport-options">
+
+              <label for="playbackSpeed">
+                Speed
+              </label>
+
+              <select
+                id="playbackSpeed"
+                aria-label="Playback speed"
+              >
+                <option value="0.5">0.5×</option>
+                <option value="0.75">0.75×</option>
+                <option value="1" selected>1.0×</option>
+                <option value="1.25">1.25×</option>
+                <option value="1.5">1.5×</option>
+                <option value="2">2.0×</option>
+              </select>
+
+            </div>
+
+          </div>
+
+
+          <!-- TIMELINE TOOLBAR -->
+
+          <div class="timeline-toolbar">
+
+            <div class="timeline-tool-group">
+
+              <button
+                type="button"
+                class="small-tool-button"
+                id="splitBtn"
+              >
+                ✂ Split
+              </button>
+
+              <button
+                type="button"
+                class="small-tool-button"
+                id="trimStartBtn"
+              >
+                ◁ Trim Start
+              </button>
+
+              <button
+                type="button"
+                class="small-tool-button"
+                id="trimEndBtn"
+              >
+                Trim End ▷
+              </button>
+
+              <button
+                type="button"
+                class="small-tool-button danger-button"
+                id="deleteAudioBtn"
+              >
+                Delete
+              </button>
+
+            </div>
+
+            <div class="timeline-zoom">
+
+              <button
+                type="button"
+                class="icon-button"
+                id="zoomOutBtn"
+                aria-label="Zoom out"
+              >
+                −
+              </button>
+
+              <span id="zoomValue">100%</span>
+
+              <button
+                type="button"
+                class="icon-button"
+                id="zoomInBtn"
+                aria-label="Zoom in"
+              >
+                +
+              </button>
+
+              <button
+                type="button"
+                class="small-tool-button"
+                id="fitTimelineBtn"
+              >
+                Fit
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <!-- MULTITRACK TIMELINE -->
+
+          <div
+            class="timeline-scroll"
+            id="timelineScroll"
+          >
+
+            <div
+              class="timeline-content"
+              id="timelineContent"
+            >
+
+              <div
+                class="timeline-ruler"
+                id="timelineRuler"
+              >
+
+                <span>00:00</span>
+                <span>00:10</span>
+                <span>00:20</span>
+                <span>00:30</span>
+                <span>00:40</span>
+                <span>00:50</span>
+
+              </div>
+
+
+              <!-- TRACK ONE -->
+
+              <div
+                class="timeline-track"
+                data-track-type="music"
+              >
+
+                <div class="timeline-track-header">
+
+                  <span class="track-color music-color"></span>
+
+                  <div class="timeline-track-info">
+
+                    <strong id="timelineTrackName">
+                      Audio Track
+                    </strong>
+
+                    <span>MAIN AUDIO</span>
+
+                  </div>
+
+                  <button
+                    type="button"
+                    class="track-mini-button"
+                    data-track-action="mute"
+                    data-track="music"
+                    aria-label="Mute audio track"
+                  >
+                    M
+                  </button>
+
+                  <button
+                    type="button"
+                    class="track-mini-button"
+                    data-track-action="solo"
+                    data-track="music"
+                    aria-label="Solo audio track"
+                  >
+                    S
+                  </button>
+
                 </div>
 
-                <label class="speed-control">
-                  <span>Speed</span>
-                  <select id="playbackSpeed">
-                    <option value="0.5">0.5×</option>
-                    <option value="0.75">0.75×</option>
-                    <option value="1" selected>1×</option>
-                    <option value="1.25">1.25×</option>
-                    <option value="1.5">1.5×</option>
-                    <option value="2">2×</option>
-                  </select>
+                <div class="timeline-track-content">
+
+                  <div class="audio-clip" id="mainAudioClip">
+
+                    <canvas
+                      id="waveformCanvas"
+                      aria-label="Audio waveform"
+                    ></canvas>
+
+                    <div
+                      class="empty-waveform"
+                      id="emptyWaveform"
+                    >
+                      <span>＋</span>
+                      <span>Import audio to create a clip</span>
+                    </div>
+
+                  </div>
+
+                  <div
+                    class="playhead"
+                    id="playhead"
+                  ></div>
+
+                </div>
+
+              </div>
+
+
+              <!-- VOICE TRACK -->
+
+              <div
+                class="timeline-track"
+                data-track-type="voice"
+              >
+
+                <div class="timeline-track-header">
+
+                  <span class="track-color voice-color"></span>
+
+                  <div class="timeline-track-info">
+
+                    <strong>Voice Track</strong>
+
+                    <span>VOCAL RECORDING</span>
+
+                  </div>
+
+                  <button
+                    type="button"
+                    class="track-mini-button"
+                    data-track-action="mute"
+                    data-track="voice"
+                    aria-label="Mute voice track"
+                  >
+                    M
+                  </button>
+
+                  <button
+                    type="button"
+                    class="track-mini-button"
+                    data-track-action="solo"
+                    data-track="voice"
+                    aria-label="Solo voice track"
+                  >
+                    S
+                  </button>
+
+                </div>
+
+                <div class="timeline-track-content">
+
+                  <div
+                    class="audio-clip voice-clip"
+                    id="voiceAudioClip"
+                  >
+                    <span class="clip-placeholder">
+                      Record voice to add a clip
+                    </span>
+                  </div>
+
+                </div>
+
+              </div>
+
+
+              <!-- KEYBOARD TRACK -->
+
+              <div
+                class="timeline-track"
+                data-track-type="keyboard"
+              >
+
+                <div class="timeline-track-header">
+
+                  <span class="track-color keyboard-color"></span>
+
+                  <div class="timeline-track-info">
+
+                    <strong>Instrument Track</strong>
+
+                    <span>VIRTUAL KEYBOARD</span>
+
+                  </div>
+
+                  <button
+                    type="button"
+                    class="track-mini-button"
+                    data-track-action="mute"
+                    data-track="keyboard"
+                    aria-label="Mute instrument track"
+                  >
+                    M
+                  </button>
+
+                  <button
+                    type="button"
+                    class="track-mini-button"
+                    data-track-action="solo"
+                    data-track="keyboard"
+                    aria-label="Solo instrument track"
+                  >
+                    S
+                  </button>
+
+                </div>
+
+                <div class="timeline-track-content">
+
+                  <div
+                    class="audio-clip keyboard-clip"
+                    id="keyboardAudioClip"
+                  >
+                    <span class="clip-placeholder">
+                      Record keyboard notes to add a clip
+                    </span>
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div
+            class="timeline-help"
+            id="timelineHelp"
+          >
+            Import audio, move the playhead, split clips and arrange
+            tracks. Audio can be mixed during export.
+          </div>
+
+
+          <!-- EDITOR ADJUSTMENTS -->
+
+          <div class="editor-controls-grid">
+
+
+            <!-- LIVE VOLUME -->
+
+            <article class="control-card">
+
+              <div class="control-card-heading">
+
+                <div>
+                  <span class="control-icon">◖</span>
+                  <h3>Volume</h3>
+                </div>
+
+                <span
+                  class="control-value"
+                  id="volumeValue"
+                >
+                  100%
+                </span>
+
+              </div>
+
+              <input
+                type="range"
+                id="volumeControl"
+                min="0"
+                max="200"
+                value="100"
+                step="1"
+                aria-label="Track volume"
+              >
+
+              <div class="range-labels">
+                <span>0%</span>
+                <span>100%</span>
+                <span>200%</span>
+              </div>
+
+            </article>
+
+
+            <!-- BASS -->
+
+            <article class="control-card">
+
+              <div class="control-card-heading">
+
+                <div>
+                  <span class="control-icon">≋</span>
+                  <h3>Bass</h3>
+                </div>
+
+                <span
+                  class="control-value"
+                  id="bassValue"
+                >
+                  0 dB
+                </span>
+
+              </div>
+
+              <input
+                type="range"
+                id="bassControl"
+                min="-15"
+                max="15"
+                value="0"
+                step="0.5"
+                aria-label="Bass equalizer"
+              >
+
+              <div class="range-labels">
+                <span>-15 dB</span>
+                <span>Flat</span>
+                <span>+15 dB</span>
+              </div>
+
+            </article>
+
+
+            <!-- MID -->
+
+            <article class="control-card">
+
+              <div class="control-card-heading">
+
+                <div>
+                  <span class="control-icon">≋</span>
+                  <h3>Mid</h3>
+                </div>
+
+                <span
+                  class="control-value"
+                  id="midValue"
+                >
+                  0 dB
+                </span>
+
+              </div>
+
+              <input
+                type="range"
+                id="midControl"
+                min="-15"
+                max="15"
+                value="0"
+                step="0.5"
+                aria-label="Mid equalizer"
+              >
+
+              <div class="range-labels">
+                <span>-15 dB</span>
+                <span>Flat</span>
+                <span>+15 dB</span>
+              </div>
+
+            </article>
+
+
+            <!-- TREBLE -->
+
+            <article class="control-card">
+
+              <div class="control-card-heading">
+
+                <div>
+                  <span class="control-icon">⌁</span>
+                  <h3>Treble</h3>
+                </div>
+
+                <span
+                  class="control-value"
+                  id="trebleValue"
+                >
+                  0 dB
+                </span>
+
+              </div>
+
+              <input
+                type="range"
+                id="trebleControl"
+                min="-15"
+                max="15"
+                value="0"
+                step="0.5"
+                aria-label="Treble equalizer"
+              >
+
+              <div class="range-labels">
+                <span>-15 dB</span>
+                <span>Flat</span>
+                <span>+15 dB</span>
+              </div>
+
+            </article>
+
+
+            <!-- PAN -->
+
+            <article class="control-card">
+
+              <div class="control-card-heading">
+
+                <div>
+                  <span class="control-icon">◁▷</span>
+                  <h3>Stereo Pan</h3>
+                </div>
+
+                <span
+                  class="control-value"
+                  id="panValue"
+                >
+                  Center
+                </span>
+
+              </div>
+
+              <input
+                type="range"
+                id="panControl"
+                min="-100"
+                max="100"
+                value="0"
+                step="1"
+                aria-label="Stereo pan"
+              >
+
+              <div class="range-labels">
+                <span>Left</span>
+                <span>Center</span>
+                <span>Right</span>
+              </div>
+
+            </article>
+
+
+            <!-- REVERB -->
+
+            <article class="control-card">
+
+              <div class="control-card-heading">
+
+                <div>
+                  <span class="control-icon">〰</span>
+                  <h3>Reverb</h3>
+                </div>
+
+                <span
+                  class="control-value"
+                  id="reverbValue"
+                >
+                  0%
+                </span>
+
+              </div>
+
+              <input
+                type="range"
+                id="reverbControl"
+                min="0"
+                max="100"
+                value="0"
+                step="1"
+                aria-label="Reverb amount"
+              >
+
+              <div class="range-labels">
+                <span>Dry</span>
+                <span>Room</span>
+                <span>Large</span>
+              </div>
+
+            </article>
+
+
+            <!-- DELAY -->
+
+            <article class="control-card">
+
+              <div class="control-card-heading">
+
+                <div>
+                  <span class="control-icon">↝</span>
+                  <h3>Delay / Echo</h3>
+                </div>
+
+                <span
+                  class="control-value"
+                  id="delayValue"
+                >
+                  0%
+                </span>
+
+              </div>
+
+              <input
+                type="range"
+                id="delayControl"
+                min="0"
+                max="100"
+                value="0"
+                step="1"
+                aria-label="Delay effect"
+              >
+
+              <div class="range-labels">
+                <span>Off</span>
+                <span>Echo</span>
+                <span>Strong</span>
+              </div>
+
+            </article>
+
+
+            <!-- DISTORTION -->
+
+            <article class="control-card">
+
+              <div class="control-card-heading">
+
+                <div>
+                  <span class="control-icon">ϟ</span>
+                  <h3>Distortion</h3>
+                </div>
+
+                <span
+                  class="control-value"
+                  id="distortionValue"
+                >
+                  0%
+                </span>
+
+              </div>
+
+              <input
+                type="range"
+                id="distortionControl"
+                min="0"
+                max="100"
+                value="0"
+                step="1"
+                aria-label="Distortion amount"
+              >
+
+              <div class="range-labels">
+                <span>Clean</span>
+                <span>Warm</span>
+                <span>Heavy</span>
+              </div>
+
+            </article>
+
+
+          </div>
+
+
+          <!-- EDITOR TOOL BUTTONS -->
+
+          <div class="editor-action-bar">
+
+            <button
+              type="button"
+              class="button button-secondary"
+              id="resetAdjustmentsBtn"
+            >
+              Reset Adjustments
+            </button>
+
+            <button
+              type="button"
+              class="button button-secondary"
+              id="compareBtn"
+            >
+              Original / Edited
+            </button>
+
+            <span
+              id="compareStatus"
+              class="muted-text"
+            >
+              Edited audio
+            </span>
+
+          </div>
+
+
+          <!-- FADE CONTROLS -->
+
+          <div class="fade-panel">
+
+            <div class="fade-heading">
+              <h3>Fade Controls</h3>
+              <p>Control the beginning and ending of your audio.</p>
+            </div>
+
+            <div class="fade-control">
+
+              <label for="fadeInControl">
+                Fade In
+              </label>
+
+              <input
+                type="range"
+                id="fadeInControl"
+                min="0"
+                max="10"
+                value="0"
+                step="0.1"
+              >
+
+              <span id="fadeInValue">0.0 s</span>
+
+            </div>
+
+            <div class="fade-control">
+
+              <label for="fadeOutControl">
+                Fade Out
+              </label>
+
+              <input
+                type="range"
+                id="fadeOutControl"
+                min="0"
+                max="10"
+                value="0"
+                step="0.1"
+              >
+
+              <span id="fadeOutValue">0.0 s</span>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- =================================================
+             VOICE RECORDING SECTION
+             ================================================= -->
+
+        <section
+          class="studio-section"
+          id="voiceSection"
+        >
+
+          <div class="section-heading">
+
+            <div>
+              <div class="eyebrow">
+                RECORDING STUDIO
+              </div>
+
+              <h2>Live Voice Recording</h2>
+
+              <p>
+                Record vocals and add them as separate tracks.
+              </p>
+            </div>
+
+            <div
+              class="recording-status"
+              id="recordingState"
+            >
+              Ready to record
+            </div>
+
+          </div>
+
+
+          <div class="recording-workspace">
+
+            <div class="recording-orb-wrap">
+
+              <div
+                class="recording-orb"
+                id="recordingOrb"
+              >
+                <span>🎙</span>
+              </div>
+
+              <div
+                class="recording-timer"
+                id="recordingTimer"
+              >
+                00:00.00
+              </div>
+
+              <p class="muted-text">
+                Microphone recording
+              </p>
+
+            </div>
+
+
+            <div class="recording-main">
+
+              <div class="recording-wave-container">
+
+                <canvas
+                  id="recordingWaveform"
+                  aria-label="Live microphone waveform"
+                ></canvas>
+
+              </div>
+
+
+              <div class="recording-controls">
+
+                <button
+                  type="button"
+                  class="button button-danger"
+                  id="recordBtn"
+                >
+                  ● Start Recording
+                </button>
+
+                <button
+                  type="button"
+                  class="button button-secondary"
+                  id="pauseRecordBtn"
+                >
+                  Ⅱ Pause
+                </button>
+
+                <button
+                  type="button"
+                  class="button button-secondary"
+                  id="resumeRecordBtn"
+                >
+                  ▶ Resume
+                </button>
+
+                <button
+                  type="button"
+                  class="button button-secondary"
+                  id="stopRecordBtn"
+                >
+                  ■ Stop
+                </button>
+
+              </div>
+
+
+              <div class="recording-monitor">
+
+                <label for="monitoringControl">
+                  Headphone Monitoring
                 </label>
+
+                <input
+                  type="range"
+                  id="monitoringControl"
+                  min="0"
+                  max="100"
+                  value="0"
+                  step="1"
+                >
+
+                <span id="monitoringValue">0%</span>
+
               </div>
 
-              <input id="seekBar" class="seek-bar" type="range"
-                min="0" max="1000" value="0" step="1"
-                aria-label="Seek audio">
 
-              <div class="audio-meta">
-                <span id="audioStatus">Import audio to begin editing.</span>
-                <span id="audioFormat">No source</span>
-              </div>
-            </section>
-
-            <!-- TIMELINE TOOLBAR -->
-            <section class="panel timeline-panel">
-              <div class="panel-header timeline-heading">
-                <div>
-                  <span class="eyebrow">ARRANGE & EDIT</span>
-                  <h2>Timeline</h2>
-                </div>
-
-                <div class="timeline-actions">
-                  <button id="zoomOutBtn" class="small-button" type="button" title="Zoom out">−</button>
-                  <button id="zoomInBtn" class="small-button" type="button" title="Zoom in">＋</button>
-                  <button id="fitTimelineBtn" class="small-button" type="button">Fit</button>
-                </div>
-              </div>
-
-              <div class="edit-toolbar">
-                <button id="splitBtn" class="tool-button" type="button">✂ Split</button>
-                <button id="trimStartBtn" class="tool-button" type="button">Trim Start</button>
-                <button id="trimEndBtn" class="tool-button" type="button">Trim End</button>
-                <button id="fadeInBtn" class="tool-button" type="button">Fade In</button>
-                <button id="fadeOutBtn" class="tool-button" type="button">Fade Out</button>
-                <button id="deleteAudioBtn" class="tool-button danger-button" type="button">Delete Track</button>
-              </div>
-
-              <div class="timeline-scroll" id="timelineScroll">
-                <div class="timeline-content" id="timelineContent">
-                  <div class="timeline-ruler" id="timelineRuler">
-                    <span>00:00</span>
-                    <span id="timelineEnd">End</span>
-                  </div>
-
-                  <div class="timeline-tracks" id="timelineTracks">
-
-                    <div class="timeline-track-row">
-                      <div class="track-label">
-                        <span class="track-color music-color"></span>
-                        <div>
-                          <strong>Music</strong>
-                          <small id="musicTrackName">No file</small>
-                        </div>
-                        <button id="musicMuteBtn" class="track-mute-button" type="button" title="Mute music">M</button>
-                      </div>
-
-                      <div class="track-lane" id="musicTrackLane">
-                        <canvas id="waveformCanvas" class="waveform-canvas"
-                          aria-label="Music waveform"></canvas>
-                        <div id="emptyWaveform" class="empty-waveform">
-                          Import audio to see waveform
-                        </div>
-                        <div id="playhead" class="playhead"></div>
-                      </div>
-                    </div>
-
-                    <div class="timeline-track-row">
-                      <div class="track-label">
-                        <span class="track-color vocal-color"></span>
-                        <div>
-                          <strong>Voice</strong>
-                          <small id="voiceTrackName">No recording</small>
-                        </div>
-                        <button id="voiceMuteBtn" class="track-mute-button" type="button" title="Mute voice">M</button>
-                      </div>
-                      <div class="track-lane" id="voiceTrackLane">
-                        <canvas id="voiceWaveformCanvas" class="waveform-canvas"
-                          aria-label="Voice waveform"></canvas>
-                        <div id="emptyVoiceWaveform" class="empty-waveform">
-                          Record or import a voice track
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="timeline-track-row">
-                      <div class="track-label">
-                        <span class="track-color keyboard-color"></span>
-                        <div>
-                          <strong>Keyboard</strong>
-                          <small id="keyboardTrackName">No keyboard take</small>
-                        </div>
-                        <button id="keyboardMuteBtn" class="track-mute-button" type="button" title="Mute keyboard">M</button>
-                      </div>
-                      <div class="track-lane" id="keyboardTrackLane">
-                        <canvas id="keyboardWaveformCanvas" class="waveform-canvas"
-                          aria-label="Keyboard waveform"></canvas>
-                        <div id="emptyKeyboardWaveform" class="empty-waveform">
-                          Record a keyboard take
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="timeline-track-row">
-                      <div class="track-label">
-                        <span class="track-color extra-color"></span>
-                        <div>
-                          <strong>Extra Audio</strong>
-                          <small id="extraTrackName">Add another track</small>
-                        </div>
-                        <button id="extraMuteBtn" class="track-mute-button" type="button" title="Mute extra track">M</button>
-                      </div>
-                      <div class="track-lane" id="extraTrackLane">
-                        <canvas id="extraWaveformCanvas" class="waveform-canvas"
-                          aria-label="Extra audio waveform"></canvas>
-                        <div id="emptyExtraWaveform" class="empty-waveform">
-                          Import more audio tracks
-                        </div>
-                      </div>
-                    </div>
-
-                  </div>
-                </div>
-              </div>
-
-              <p id="timelineHelp" class="help-text">
-                Import multiple audio files to arrange them as separate tracks.
-              </p>
-            </section>
-
-            <!-- MULTITRACK LIBRARY -->
-            <section class="panel track-library-panel">
-              <div class="panel-header">
-                <div>
-                  <span class="eyebrow">PROJECT SOURCES</span>
-                  <h2>Track Library</h2>
-                </div>
-                <span id="trackCount" class="status-pill">0 tracks</span>
-              </div>
-              <div id="trackList" class="track-list">
-                <p class="empty-message">Your imported audio tracks will appear here.</p>
-              </div>
-            </section>
-          </div>
-
-          <!-- RIGHT SIDEBAR -->
-          <aside class="editor-sidebar">
-
-            <section class="panel adjustment-panel">
-              <div class="panel-header">
-                <div>
-                  <span class="eyebrow">LIVE PROCESSING</span>
-                  <h2>Sound Adjustments</h2>
-                </div>
-                <span class="live-dot">LIVE</span>
-              </div>
-
-              <p class="help-text">
-                Changes should be heard while audio is playing.
+              <p class="small-note">
+                Use headphones while monitoring to reduce feedback.
+                Microphone permission is required.
               </p>
 
-              <div class="slider-field">
-                <div class="slider-heading">
-                  <label for="volumeControl">Track Volume</label>
-                  <output id="volumeValue">100%</output>
-                </div>
-                <input id="volumeControl" type="range" min="0" max="200" value="100">
-              </div>
+            </div>
 
-              <div class="slider-field">
-                <div class="slider-heading">
-                  <label for="bassControl">Bass</label>
-                  <output id="bassValue">0 dB</output>
-                </div>
-                <input id="bassControl" type="range" min="-15" max="15" value="0">
-              </div>
-
-              <div class="slider-field">
-                <div class="slider-heading">
-                  <label for="midControl">Mid</label>
-                  <output id="midValue">0 dB</output>
-                </div>
-                <input id="midControl" type="range" min="-15" max="15" value="0">
-              </div>
-
-              <div class="slider-field">
-                <div class="slider-heading">
-                  <label for="trebleControl">Treble</label>
-                  <output id="trebleValue">0 dB</output>
-                </div>
-                <input id="trebleControl" type="range" min="-15" max="15" value="0">
-              </div>
-
-              <div class="slider-field">
-                <div class="slider-heading">
-                  <label for="panControl">Stereo Pan</label>
-                  <output id="panValue">Center</output>
-                </div>
-                <input id="panControl" type="range" min="-100" max="100" value="0">
-              </div>
-
-              <div class="slider-field">
-                <div class="slider-heading">
-                  <label for="reverbControl">Reverb</label>
-                  <output id="reverbValue">0%</output>
-                </div>
-                <input id="reverbControl" type="range" min="0" max="100" value="0">
-              </div>
-
-              <div class="slider-field">
-                <div class="slider-heading">
-                  <label for="delayControl">Delay / Echo</label>
-                  <output id="delayValue">0%</output>
-                </div>
-                <input id="delayControl" type="range" min="0" max="100" value="0">
-              </div>
-
-              <div class="slider-field">
-                <div class="slider-heading">
-                  <label for="fadeInControl">Fade In</label>
-                  <output id="fadeInValue">0 s</output>
-                </div>
-                <input id="fadeInControl" type="range" min="0" max="10" step="0.1" value="0">
-              </div>
-
-              <div class="slider-field">
-                <div class="slider-heading">
-                  <label for="fadeOutControl">Fade Out</label>
-                  <output id="fadeOutValue">0 s</output>
-                </div>
-                <input id="fadeOutControl" type="range" min="0" max="10" step="0.1" value="0">
-              </div>
-
-              <div class="adjustment-actions">
-                <button id="compareBtn" class="button button-secondary" type="button">A/B Compare</button>
-                <button id="resetAdjustmentsBtn" class="button button-secondary" type="button">Reset</button>
-              </div>
-              <p id="compareStatus" class="help-text">Processed audio enabled.</p>
-            </section>
-
-            <section class="panel presets-panel">
-              <div class="panel-header">
-                <div>
-                  <span class="eyebrow">QUICK SOUND</span>
-                  <h2>Presets</h2>
-                </div>
-              </div>
-              <div class="preset-grid">
-                <button class="preset-button active" data-preset="clean" type="button">Clean</button>
-                <button class="preset-button" data-preset="warm" type="button">Warm</button>
-                <button class="preset-button" data-preset="bright" type="button">Bright</button>
-                <button class="preset-button" data-preset="rap" type="button">Rap</button>
-                <button class="preset-button" data-preset="gospel" type="button">Gospel</button>
-                <button class="preset-button" data-preset="studio" type="button">Studio</button>
-              </div>
-              <p id="presetStatus" class="help-text">Choose a sound preset.</p>
-            </section>
-
-          </aside>
-        </div>
-      </section>
-
-      <!-- VOICE RECORDING -->
-      <section class="studio-section" id="voiceSection">
-        <div class="section-heading">
-          <div>
-            <span class="eyebrow">MICROPHONE STUDIO</span>
-            <h1>Voice Recording</h1>
-            <p>Record vocals, pause, resume, monitor and add takes to your project.</p>
           </div>
-        </div>
 
-        <div class="recording-layout">
-          <section class="panel recording-panel">
-            <div class="recording-orb" id="recordingOrb">
-              <div class="recording-orb-inner">
-                <span>REC</span>
-              </div>
+
+          <!-- RECORDING RESULT -->
+
+          <div
+            class="recording-result"
+            id="recordingResult"
+          >
+
+            <div class="result-heading">
+              <h3>Recorded Take</h3>
+              <span id="recordingResultStatus">
+                No recording yet
+              </span>
             </div>
 
-            <h2 id="recordingState">Ready to record</h2>
-            <div class="recording-timer" id="recordingTimer">00:00.00</div>
-
-            <canvas id="recordingWaveform" class="recording-waveform"
-              aria-label="Live microphone waveform"></canvas>
-
-            <div class="recording-controls">
-              <button id="recordBtn" class="button button-record" type="button">● Start Recording</button>
-              <button id="pauseRecordBtn" class="button button-secondary" type="button">Ⅱ Pause</button>
-              <button id="resumeRecordBtn" class="button button-secondary" type="button">▶ Resume</button>
-              <button id="stopRecordBtn" class="button button-secondary" type="button">■ Stop</button>
-            </div>
-
-            <div class="slider-field">
-              <div class="slider-heading">
-                <label for="monitoringControl">Microphone Monitoring</label>
-                <output id="monitoringValue">0%</output>
-              </div>
-              <input id="monitoringControl" type="range" min="0" max="100" value="0">
-              <p class="help-text">Headphone monitoring is recommended to reduce feedback.</p>
-            </div>
-          </section>
-
-          <section class="panel recording-result-panel">
-            <div class="panel-header">
-              <div>
-                <span class="eyebrow">RECORDING TAKE</span>
-                <h2>Your Recording</h2>
-              </div>
-            </div>
-
-            <div id="recordingResult" class="recording-result">
-              <p class="empty-message">Your completed recording will appear here.</p>
-            </div>
+            <audio
+              id="recordingPreview"
+              controls
+              preload="metadata"
+            ></audio>
 
             <div class="recording-result-actions">
-              <button id="downloadRecordingBtn" class="button button-secondary" type="button">Download Take</button>
-              <button id="useRecordingBtn" class="button button-primary" type="button">Add to Timeline</button>
-              <button id="discardRecordingBtn" class="button button-danger" type="button">Discard Take</button>
+
+              <button
+                type="button"
+                class="button button-secondary"
+                id="downloadRecordingBtn"
+              >
+                Download Recording
+              </button>
+
+              <button
+                type="button"
+                class="button button-primary"
+                id="useRecordingBtn"
+              >
+                Add to Timeline
+              </button>
+
+              <button
+                type="button"
+                class="button button-secondary"
+                id="discardRecordingBtn"
+              >
+                Discard Take
+              </button>
+
             </div>
 
-            <p class="help-text">
-              Microphone recording requires browser permission and a secure HTTPS connection.
-            </p>
-          </section>
-        </div>
-      </section>
-
-      <!-- VIRTUAL KEYBOARD -->
-      <section class="studio-section" id="keyboardSection">
-        <div class="section-heading">
-          <div>
-            <span class="eyebrow">VIRTUAL INSTRUMENT</span>
-            <h1>Music Keyboard</h1>
-            <p>Play notes with touch, mouse or computer keyboard and record a take.</p>
           </div>
-        </div>
 
-        <section class="panel keyboard-panel">
+
+          <!-- VOCAL PRESETS -->
+
+          <div class="preset-section">
+
+            <div class="section-subheading">
+              <h3>Vocal Presets</h3>
+              <p>Starting points for different vocal styles.</p>
+            </div>
+
+            <div class="preset-grid">
+
+              <button
+                type="button"
+                class="preset-button"
+                data-preset="clean"
+              >
+                <span>◇</span>
+                <strong>Clean</strong>
+                <small>Natural voice</small>
+              </button>
+
+              <button
+                type="button"
+                class="preset-button"
+                data-preset="warm"
+              >
+                <span>◉</span>
+                <strong>Warm</strong>
+                <small>Fuller tone</small>
+              </button>
+
+              <button
+                type="button"
+                class="preset-button"
+                data-preset="bright"
+              >
+                <span>✧</span>
+                <strong>Bright</strong>
+                <small>Clear presence</small>
+              </button>
+
+              <button
+                type="button"
+                class="preset-button"
+                data-preset="rap"
+              >
+                <span>ϟ</span>
+                <strong>Rap</strong>
+                <small>Forward vocal</small>
+              </button>
+
+              <button
+                type="button"
+                class="preset-button"
+                data-preset="gospel"
+              >
+                <span>♫</span>
+                <strong>Gospel</strong>
+                <small>Room ambience</small>
+              </button>
+
+              <button
+                type="button"
+                class="preset-button"
+                data-preset="studio"
+              >
+                <span>✦</span>
+                <strong>Studio</strong>
+                <small>Balanced tone</small>
+              </button>
+
+            </div>
+
+            <p id="presetStatus" class="small-note">
+              Select a preset to apply its supported audio settings.
+            </p>
+
+          </div>
+
+        </section>
+
+
+        <!-- =================================================
+             VIRTUAL KEYBOARD SECTION
+             ================================================= -->
+
+        <section
+          class="studio-section"
+          id="keyboardSection"
+        >
+
+          <div class="section-heading">
+
+            <div>
+              <div class="eyebrow">
+                VIRTUAL INSTRUMENTS
+              </div>
+
+              <h2>Music Keyboard</h2>
+
+              <p>
+                Play notes, record your performance and add it
+                to the multitrack arrangement.
+              </p>
+            </div>
+
+          </div>
+
+
           <div class="keyboard-toolbar">
-            <label class="select-field">
-              <span>Instrument</span>
-              <select id="instrumentSelect">
-                <option value="piano">Piano</option>
-                <option value="electric">Electric Piano</option>
-                <option value="bass">Bass</option>
-                <option value="synth">Synth</option>
-              </select>
-            </label>
 
-            <label class="select-field">
-              <span>Octave</span>
+            <div class="field-group">
+
+              <label for="instrumentSelect">
+                Instrument
+              </label>
+
+              <select id="instrumentSelect">
+
+                <option value="piano">Piano</option>
+
+                <option value="electric">
+                  Electric Piano
+                </option>
+
+                <option value="bass">
+                  Bass
+                </option>
+
+                <option value="synth">
+                  Synth
+                </option>
+
+              </select>
+
+            </div>
+
+
+            <div class="field-group">
+
+              <label for="octaveSelect">
+                Octave
+              </label>
+
               <select id="octaveSelect">
+
                 <option value="2">Octave 2</option>
-                <option value="3" selected>Octave 3</option>
-                <option value="4">Octave 4</option>
+                <option value="3">Octave 3</option>
+                <option value="4" selected>Octave 4</option>
                 <option value="5">Octave 5</option>
                 <option value="6">Octave 6</option>
+
               </select>
-            </label>
 
-            <label class="slider-field keyboard-volume">
-              <div class="slider-heading">
-                <span>Keyboard Volume</span>
-                <output id="keyboardVolumeValue">70%</output>
-              </div>
-              <input id="keyboardVolume" type="range" min="0" max="100" value="70">
-            </label>
+            </div>
 
-            <button id="sustainBtn" class="button button-secondary" type="button" aria-pressed="false">Sustain OFF</button>
+
+            <div class="field-group keyboard-volume-field">
+
+              <label for="keyboardVolume">
+                Instrument Volume
+              </label>
+
+              <input
+                type="range"
+                id="keyboardVolume"
+                min="0"
+                max="1"
+                value="0.7"
+                step="0.01"
+              >
+
+            </div>
+
+
+            <button
+              type="button"
+              class="button button-secondary"
+              id="sustainBtn"
+              aria-pressed="false"
+            >
+              Sustain OFF
+            </button>
+
           </div>
+
+
+          <!-- KEYBOARD NOTE RECORDING -->
+
+          <div class="keyboard-record-panel">
+
+            <div>
+              <strong>Keyboard Performance</strong>
+
+              <p id="keyboardStatus">
+                Ready to play
+              </p>
+            </div>
+
+            <div class="keyboard-record-controls">
+
+              <button
+                type="button"
+                class="button button-danger"
+                id="recordKeyboardBtn"
+              >
+                ● Start Recording
+              </button>
+
+              <button
+                type="button"
+                class="button button-secondary"
+                id="pauseKeyboardBtn"
+              >
+                Ⅱ Pause
+              </button>
+
+              <button
+                type="button"
+                class="button button-secondary"
+                id="resumeKeyboardBtn"
+              >
+                ▶ Resume
+              </button>
+
+              <button
+                type="button"
+                class="button button-secondary"
+                id="stopKeyboardBtn"
+              >
+                ■ Stop
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <div class="keyboard-instructions">
+
+            <span>Touch the keys to play.</span>
+
+            <span>
+              Computer keyboard:
+              A W S E D F T G Y H U J K
+            </span>
+
+          </div>
+
 
           <div class="keyboard-scroll">
-            <div id="pianoKeyboard" class="piano-keyboard" aria-label="Virtual piano keyboard"></div>
+
+            <div
+              class="piano-keyboard"
+              id="pianoKeyboard"
+              aria-label="Virtual piano keyboard"
+            >
+              <!-- JavaScript creates the keys. -->
+            </div>
+
           </div>
 
-          <p id="keyboardStatus" class="help-text">
-            Tap a piano key or use A W S E D F T G Y H U J K on your computer keyboard.
-          </p>
 
-          <div class="keyboard-record-controls">
-            <span class="eyebrow">KEYBOARD TAKE RECORDING</span>
-            <button id="recordKeyboardBtn" class="button button-record" type="button">● Start Keyboard Recording</button>
-            <button id="pauseKeyboardBtn" class="button button-secondary" type="button">Ⅱ Pause</button>
-            <button id="resumeKeyboardBtn" class="button button-secondary" type="button">▶ Resume</button>
-            <button id="stopKeyboardBtn" class="button button-secondary" type="button">■ Stop</button>
-            <button id="playKeyboardTakeBtn" class="button button-secondary" type="button">▶ Play Take</button>
-            <button id="useKeyboardTakeBtn" class="button button-primary" type="button">Add Take to Timeline</button>
+          <div class="keyboard-bottom-actions">
+
+            <button
+              type="button"
+              class="button button-secondary"
+              id="playKeyboardRecordingBtn"
+            >
+              ▶ Play Performance
+            </button>
+
+            <button
+              type="button"
+              class="button button-primary"
+              id="useKeyboardRecordingBtn"
+            >
+              Add Performance to Timeline
+            </button>
+
+            <button
+              type="button"
+              class="button button-secondary"
+              id="downloadKeyboardRecordingBtn"
+            >
+              Export Performance
+            </button>
+
           </div>
 
-          <div class="keyboard-take-info">
-            <span id="keyboardRecordingStatus">Not recording</span>
-            <span id="keyboardRecordingTimer">00:00.00</span>
-          </div>
         </section>
-      </section>
 
-      <!-- MIXER -->
-      <section class="studio-section" id="mixerSection">
-        <div class="section-heading">
-          <div>
-            <span class="eyebrow">MIX & MASTER</span>
-            <h1>Mixer & Effects</h1>
-            <p>Balance each track and control the master output.</p>
+
+        <!-- =================================================
+             MIXER SECTION
+             ================================================= -->
+
+        <section
+          class="studio-section"
+          id="mixerSection"
+        >
+
+          <div class="section-heading">
+
+            <div>
+              <div class="eyebrow">
+                SOUND CONTROL
+              </div>
+
+              <h2>Multitrack Mixer</h2>
+
+              <p>
+                Balance individual tracks and control the final output.
+              </p>
+            </div>
+
           </div>
-        </div>
 
-        <div class="mixer-grid">
-          <section class="panel mixer-channel">
-            <div class="panel-header">
+
+          <div class="mixer-master-card">
+
+            <div class="master-heading">
+
               <div>
-                <span class="eyebrow">CHANNEL 01</span>
-                <h2>Music</h2>
+                <span class="eyebrow">MASTER OUTPUT</span>
+                <h3>Master Channel</h3>
               </div>
-              <span class="track-color music-color"></span>
+
+              <span
+                class="master-level-text"
+                id="masterLevelText"
+              >
+                Ready
+              </span>
+
             </div>
 
-            <div class="meter-track"><div id="audioMeter" class="meter-fill"></div></div>
 
-            <div class="slider-field">
-              <div class="slider-heading"><label for="mixerVolume">Volume</label><output id="mixerVolumeValue">100%</output></div>
-              <input id="mixerVolume" type="range" min="0" max="200" value="100">
+            <div class="master-meter">
+
+              <div
+                class="meter-fill"
+                id="masterMeter"
+              ></div>
+
             </div>
 
-            <div class="slider-field">
-              <div class="slider-heading"><label for="mixerPan">Pan</label><output id="mixerPanValue">Center</output></div>
-              <input id="mixerPan" type="range" min="-100" max="100" value="0">
-            </div>
 
-            <div class="channel-buttons">
-              <button id="muteBtn" class="button button-secondary" type="button" aria-pressed="false">Mute</button>
-              <button id="soloBtn" class="button button-secondary" type="button" aria-pressed="false">Solo</button>
-            </div>
-          </section>
+            <div class="master-controls">
 
-          <section class="panel mixer-channel">
-            <div class="panel-header">
-              <div>
-                <span class="eyebrow">MASTER BUS</span>
-                <h2>Master Output</h2>
+              <div class="master-volume-control">
+
+                <label for="mixerVolume">
+                  Master Volume
+                </label>
+
+                <input
+                  type="range"
+                  id="mixerVolume"
+                  min="0"
+                  max="200"
+                  value="100"
+                  step="1"
+                >
+
               </div>
-              <span class="live-dot">LIVE</span>
+
+              <button
+                type="button"
+                class="button button-secondary"
+                id="muteBtn"
+              >
+                Mute Master
+              </button>
+
             </div>
 
-            <div class="master-meter-track">
-              <div id="masterMeter" class="meter-fill"></div>
-            </div>
 
-            <div class="master-readout">
-              <strong id="masterLevelText">-∞ dB</strong>
-              <span id="clippingStatus">Waiting for audio</span>
-            </div>
+            <p
+              id="clippingStatus"
+              class="clipping-status"
+            >
+              Clipping status: waiting for audio
+            </p>
 
-            <div class="slider-field">
-              <div class="slider-heading"><label for="masterVolume">Master Volume</label><output id="masterVolumeValue">90%</output></div>
-              <input id="masterVolume" type="range" min="0" max="100" value="90">
-            </div>
+          </div>
 
-            <button id="masterMuteBtn" class="button button-secondary" type="button">Master Mute</button>
-            <button id="analyzeAudioBtn" class="button button-primary" type="button">Analyze Audio</button>
-          </section>
 
-          <section class="panel analysis-panel">
-            <div class="panel-header">
-              <div>
-                <span class="eyebrow">SIGNAL ANALYSIS</span>
-                <h2>Audio Analysis</h2>
+          <!-- INDIVIDUAL MIXER TRACKS -->
+
+          <div class="mixer-tracks-grid">
+
+
+            <article class="mixer-channel">
+
+              <div class="mixer-channel-header">
+
+                <span class="channel-number">
+                  01
+                </span>
+
+                <div>
+                  <h3>Main Audio</h3>
+                  <span>INPUT CHANNEL</span>
+                </div>
+
               </div>
+
+              <div
+                class="channel-meter"
+                id="audioMeter"
+              >
+                <div class="channel-meter-fill"></div>
+              </div>
+
+              <div class="channel-control">
+
+                <label for="mixerTrackVolume">
+                  Volume
+                </label>
+
+                <input
+                  type="range"
+                  id="mixerTrackVolume"
+                  min="0"
+                  max="200"
+                  value="100"
+                >
+
+              </div>
+
+              <div class="channel-control">
+
+                <label for="mixerPan">
+                  Pan
+                </label>
+
+                <input
+                  type="range"
+                  id="mixerPan"
+                  min="-100"
+                  max="100"
+                  value="0"
+                >
+
+              </div>
+
+              <div class="channel-buttons">
+
+                <button
+                  type="button"
+                  class="small-tool-button"
+                  data-track-action="mute"
+                  data-track="music"
+                >
+                  Mute
+                </button>
+
+                <button
+                  type="button"
+                  class="small-tool-button"
+                  data-track-action="solo"
+                  data-track="music"
+                >
+                  Solo
+                </button>
+
+              </div>
+
+            </article>
+
+
+            <article class="mixer-channel">
+
+              <div class="mixer-channel-header">
+
+                <span class="channel-number">
+                  02
+                </span>
+
+                <div>
+                  <h3>Voice</h3>
+                  <span>VOCAL CHANNEL</span>
+                </div>
+
+              </div>
+
+              <div
+                class="channel-meter"
+                id="voiceMeter"
+              >
+                <div class="channel-meter-fill"></div>
+              </div>
+
+              <div class="channel-control">
+
+                <label for="voiceVolume">
+                  Volume
+                </label>
+
+                <input
+                  type="range"
+                  id="voiceVolume"
+                  min="0"
+                  max="200"
+                  value="100"
+                >
+
+              </div>
+
+              <div class="channel-control">
+
+                <label for="voicePan">
+                  Pan
+                </label>
+
+                <input
+                  type="range"
+                  id="voicePan"
+                  min="-100"
+                  max="100"
+                  value="0"
+                >
+
+              </div>
+
+              <div class="channel-buttons">
+
+                <button
+                  type="button"
+                  class="small-tool-button"
+                  data-track-action="mute"
+                  data-track="voice"
+                >
+                  Mute
+                </button>
+
+                <button
+                  type="button"
+                  class="small-tool-button"
+                  data-track-action="solo"
+                  data-track="voice"
+                >
+                  Solo
+                </button>
+
+              </div>
+
+            </article>
+
+
+            <article class="mixer-channel">
+
+              <div class="mixer-channel-header">
+
+                <span class="channel-number">
+                  03
+                </span>
+
+                <div>
+                  <h3>Instrument</h3>
+                  <span>KEYBOARD CHANNEL</span>
+                </div>
+
+              </div>
+
+              <div
+                class="channel-meter"
+                id="keyboardMeter"
+              >
+                <div class="channel-meter-fill"></div>
+              </div>
+
+              <div class="channel-control">
+
+                <label for="instrumentMixerVolume">
+                  Volume
+                </label>
+
+                <input
+                  type="range"
+                  id="instrumentMixerVolume"
+                  min="0"
+                  max="200"
+                  value="100"
+                >
+
+              </div>
+
+              <div class="channel-control">
+
+                <label for="instrumentMixerPan">
+                  Pan
+                </label>
+
+                <input
+                  type="range"
+                  id="instrumentMixerPan"
+                  min="-100"
+                  max="100"
+                  value="0"
+                >
+
+              </div>
+
+              <div class="channel-buttons">
+
+                <button
+                  type="button"
+                  class="small-tool-button"
+                  data-track-action="mute"
+                  data-track="keyboard"
+                >
+                  Mute
+                </button>
+
+                <button
+                  type="button"
+                  class="small-tool-button"
+                  data-track-action="solo"
+                  data-track="keyboard"
+                >
+                  Solo
+                </button>
+
+              </div>
+
+            </article>
+
+
+          </div>
+
+
+          <!-- AUDIO ANALYSIS -->
+
+          <div class="analysis-panel">
+
+            <div class="section-subheading">
+
+              <h3>Audio Analysis</h3>
+
+              <p>
+                Peak, RMS, duration and sample rate.
+              </p>
+
             </div>
+
 
             <div class="analysis-grid">
-              <div class="analysis-stat"><span>Duration</span><strong id="analysisDuration">—</strong></div>
-              <div class="analysis-stat"><span>Peak</span><strong id="analysisPeak">—</strong></div>
-              <div class="analysis-stat"><span>RMS</span><strong id="analysisRms">—</strong></div>
-              <div class="analysis-stat"><span>Sample Rate</span><strong id="analysisSampleRate">—</strong></div>
+
+              <div class="analysis-card">
+                <span>Duration</span>
+                <strong id="analysisDuration">--</strong>
+              </div>
+
+              <div class="analysis-card">
+                <span>Peak</span>
+                <strong id="analysisPeak">--</strong>
+              </div>
+
+              <div class="analysis-card">
+                <span>RMS</span>
+                <strong id="analysisRms">--</strong>
+              </div>
+
+              <div class="analysis-card">
+                <span>Sample Rate</span>
+                <strong id="analysisSampleRate">--</strong>
+              </div>
+
             </div>
 
-            <p id="analysisStatus" class="help-text">Import an audio file to analyze it.</p>
-          </section>
-        </div>
-      </section>
 
-      <!-- EXPORT -->
-      <section class="studio-section" id="exportSection">
-        <div class="section-heading">
-          <div>
-            <span class="eyebrow">FINAL OUTPUT</span>
-            <h1>Export Your Mix</h1>
-            <p>Render the edited and mixed tracks into a downloadable audio file.</p>
-          </div>
-        </div>
+            <button
+              type="button"
+              class="button button-secondary"
+              id="analyzeAudioBtn"
+            >
+              Analyze Audio
+            </button>
 
-        <section class="panel export-panel">
-          <div class="export-settings-grid">
-            <label class="form-field">
-              <span>File Name</span>
-              <input id="exportFileName" type="text" value="Naol_Music_Mix" maxlength="100">
-            </label>
+            <p
+              class="small-note"
+              id="analysisStatus"
+            >
+              Import audio before analyzing.
+            </p>
 
-            <label class="form-field">
-              <span>Format</span>
-              <select id="exportFormat">
-                <option value="wav" selected>WAV — PCM</option>
-                <option value="mp3">MP3 — Requires encoder</option>
-              </select>
-            </label>
-
-            <label class="form-field">
-              <span>Quality</span>
-              <select id="exportQuality">
-                <option value="high" selected>High</option>
-                <option value="standard">Standard</option>
-              </select>
-            </label>
-
-            <label class="form-field">
-              <span>Sample Rate</span>
-              <select id="exportSampleRate">
-                <option value="44100" selected>44.1 kHz</option>
-                <option value="48000">48 kHz</option>
-              </select>
-            </label>
-
-            <label class="form-field">
-              <span>Channels</span>
-              <select id="exportChannels">
-                <option value="stereo" selected>Stereo</option>
-                <option value="mono">Mono</option>
-              </select>
-            </label>
           </div>
 
-          <label class="checkbox-field">
-            <input id="normalizeExport" type="checkbox">
-            <span>Normalize output peak</span>
-          </label>
-
-          <div class="export-summary">
-            <div><span>Source</span><strong id="exportSource">Current project mix</strong></div>
-            <div><span>Duration</span><strong id="exportDuration">—</strong></div>
-            <div><span>Format</span><strong id="exportFormatSummary">WAV</strong></div>
-          </div>
-
-          <div id="exportProgressWrap" class="export-progress-wrap">
-            <div class="progress-heading">
-              <span id="exportProgressText">Ready to export</span>
-              <strong id="exportProgressPercent">0%</strong>
-            </div>
-            <progress id="exportProgress" max="100" value="0"></progress>
-          </div>
-
-          <div class="export-actions">
-            <button id="exportBtn" class="button button-primary" type="button">Render & Export Mix</button>
-            <button id="downloadExportBtn" class="button button-secondary" type="button" disabled>Download Last Export</button>
-          </div>
-
-          <p id="exportStatus" class="help-text">
-            Export should include all enabled timeline tracks and applied processing.
-          </p>
         </section>
 
-        <section class="panel backup-panel">
-          <div class="panel-header">
+
+        <!-- =================================================
+             EFFECTS SECTION
+             ================================================= -->
+
+        <section
+          class="studio-section"
+          id="effectsSection"
+        >
+
+          <div class="section-heading">
+
             <div>
-              <span class="eyebrow">PROJECT MANAGEMENT</span>
-              <h2>Backup & Restore</h2>
+              <div class="eyebrow">
+                SOUND DESIGN
+              </div>
+
+              <h2>Effects & Processing</h2>
+
+              <p>
+                Shape the tone, space and character of your sound.
+              </p>
             </div>
+
           </div>
 
-          <p class="help-text">
-            Back up your project settings and track arrangement. Audio files may need to be imported again when reopening a project.
+
+          <div class="effects-preset-grid">
+
+            <button
+              type="button"
+              class="preset-button"
+              data-preset="clean"
+            >
+              <strong>Clean</strong>
+              <small>Natural sound</small>
+            </button>
+
+            <button
+              type="button"
+              class="preset-button"
+              data-preset="warm"
+            >
+              <strong>Warm</strong>
+              <small>Fuller lows</small>
+            </button>
+
+            <button
+              type="button"
+              class="preset-button"
+              data-preset="bright"
+            >
+              <strong>Bright</strong>
+              <small>Higher presence</small>
+            </button>
+
+            <button
+              type="button"
+              class="preset-button"
+              data-preset="rap"
+            >
+              <strong>Rap Vocal</strong>
+              <small>Forward sound</small>
+            </button>
+
+            <button
+              type="button"
+              class="preset-button"
+              data-preset="gospel"
+            >
+              <strong>Gospel Space</strong>
+              <small>Reverb ambience</small>
+            </button>
+
+            <button
+              type="button"
+              class="preset-button"
+              data-preset="studio"
+            >
+              <strong>Studio</strong>
+              <small>Balanced processing</small>
+            </button>
+
+          </div>
+
+
+          <div class="effects-note">
+
+            <span class="effects-note-icon">✦</span>
+
+            <div>
+              <strong>Live processing</strong>
+
+              <p>
+                Effects should be heard while audio plays and
+                should be included in the final rendered export.
+              </p>
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- =================================================
+             EXPORT SECTION
+             ================================================= -->
+
+        <section
+          class="studio-section"
+          id="exportSection"
+        >
+
+          <div class="section-heading">
+
+            <div>
+              <div class="eyebrow">
+                FINAL OUTPUT
+              </div>
+
+              <h2>Export Your Music</h2>
+
+              <p>
+                Render the mixed audio into a downloadable file.
+              </p>
+            </div>
+
+          </div>
+
+
+          <div class="export-workspace">
+
+
+            <div class="export-settings-card">
+
+              <h3>Export Settings</h3>
+
+
+              <div class="field-group">
+
+                <label for="exportFileName">
+                  File Name
+                </label>
+
+                <input
+                  type="text"
+                  id="exportFileName"
+                  value="Naol_Music_Mix"
+                  maxlength="100"
+                >
+
+              </div>
+
+
+              <div class="field-group">
+
+                <label for="exportFormat">
+                  Format
+                </label>
+
+                <select id="exportFormat">
+
+                  <option value="wav" selected>
+                    WAV — Uncompressed
+                  </option>
+
+                  <option value="mp3">
+                    MP3 — Requires encoder
+                  </option>
+
+                </select>
+
+              </div>
+
+
+              <div class="field-group">
+
+                <label for="exportQuality">
+                  Quality
+                </label>
+
+                <select id="exportQuality">
+
+                  <option value="high" selected>
+                    High
+                  </option>
+
+                  <option value="standard">
+                    Standard
+                  </option>
+
+                </select>
+
+              </div>
+
+
+              <div class="field-group">
+
+                <label for="exportSampleRate">
+                  Sample Rate
+                </label>
+
+                <select id="exportSampleRate">
+
+                  <option value="44100" selected>
+                    44.1 kHz
+                  </option>
+
+                  <option value="48000">
+                    48 kHz
+                  </option>
+
+                </select>
+
+              </div>
+
+
+              <div class="field-group">
+
+                <label for="exportChannels">
+                  Channels
+                </label>
+
+                <select id="exportChannels">
+
+                  <option value="stereo" selected>
+                    Stereo
+                  </option>
+
+                  <option value="mono">
+                    Mono
+                  </option>
+
+                </select>
+
+              </div>
+
+
+              <label class="checkbox-row">
+
+                <input
+                  type="checkbox"
+                  id="normalizeExport"
+                  checked
+                >
+
+                <span>
+                  Normalize final output
+                </span>
+
+              </label>
+
+
+              <div class="field-group">
+
+                <label for="exportSource">
+                  Render Source
+                </label>
+
+                <select id="exportSource">
+
+                  <option value="mix" selected>
+                    Complete Mix
+                  </option>
+
+                  <option value="music">
+                    Main Audio Only
+                  </option>
+
+                </select>
+
+              </div>
+
+
+            </div>
+
+
+            <div class="export-summary-card">
+
+              <div class="export-summary-art">
+                ♫
+              </div>
+
+              <span class="eyebrow">
+                RENDER SUMMARY
+              </span>
+
+              <h3 id="exportFormatSummary">
+                WAV Stereo
+              </h3>
+
+              <p>
+                The export should include the enabled tracks,
+                processing and volume settings.
+              </p>
+
+
+              <div class="export-summary-row">
+                <span>Source duration</span>
+                <strong id="exportDuration">--</strong>
+              </div>
+
+              <div class="export-summary-row">
+                <span>Sample rate</span>
+                <strong id="exportSampleRateSummary">
+                  44.1 kHz
+                </strong>
+              </div>
+
+              <div class="export-summary-row">
+                <span>Quality</span>
+                <strong id="exportQualitySummary">
+                  High
+                </strong>
+              </div>
+
+
+              <div
+                class="export-progress-wrap"
+                id="exportProgressWrap"
+              >
+
+                <div class="export-progress-top">
+
+                  <span id="exportProgressText">
+                    Ready to export
+                  </span>
+
+                  <span id="exportProgressPercent">
+                    0%
+                  </span>
+
+                </div>
+
+                <progress
+                  id="exportProgress"
+                  max="100"
+                  value="0"
+                ></progress>
+
+              </div>
+
+
+              <button
+                type="button"
+                class="button button-primary export-button"
+                id="exportBtn"
+              >
+                ⇧ Render & Export
+              </button>
+
+
+              <button
+                type="button"
+                class="button button-secondary full-width"
+                id="downloadExportBtn"
+                disabled
+              >
+                Download Rendered File
+              </button>
+
+
+              <p
+                class="export-status"
+                id="exportStatus"
+                aria-live="polite"
+              >
+                Ready to render your mix.
+              </p>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- =================================================
+             FOOTER
+             ================================================= -->
+
+        <footer class="studio-footer">
+
+          <div class="footer-brand">
+            NAOL MUSIC STUDIO 3D
+          </div>
+
+          <p>
+            Browser-based audio recording, editing and mixing.
           </p>
 
-          <div class="backup-actions">
-            <button id="backupProjectBtn" class="button button-secondary" type="button">Download Project Backup</button>
-            <label class="button button-secondary" for="restoreProjectInput">Restore Project</label>
-            <input id="restoreProjectInput" type="file" accept=".json,application/json" hidden>
-          </div>
+          <span>
+            <span class="status-dot"></span>
+            <span id="engineFooterStatus">
+              Audio engine ready
+            </span>
+          </span>
 
-          <p id="backupStatus" class="help-text">No backup action yet.</p>
-        </section>
-      </section>
+        </footer>
+
+
+      </div>
 
     </main>
 
-    <!-- FOOTER -->
-    <footer class="studio-footer">
-      <span>NAOL MUSIC STUDIO 3D</span>
-      <span>Browser-based recording, editing & mixing</span>
-      <span id="projectState">Ready</span>
-    </footer>
-
-    <!-- GLOBAL NOTIFICATION -->
-    <div id="toast" class="toast" role="status" aria-live="polite"></div>
-
   </div>
 
-  <script src="script.js"></script>
+
+  <!-- GLOBAL NOTIFICATION -->
+
+  <div
+    class="toast"
+    id="toast"
+    role="status"
+    aria-live="polite"
+  ></div>
+
+
 </body>
 </html>
