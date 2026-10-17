@@ -1,0 +1,74 @@
+
+/* =========================================================
+   NAOL MUSIC STUDIO 3D
+   Part 2/3 — Complete style.css
+   Dark professional audio workstation
+   ========================================================= */
+
+:root {
+  color-scheme: dark;
+  --bg: #080b12;
+  --bg-soft: #0d111c;
+  --panel: #111725;
+  --panel-2: #161e2e;
+  --panel-3: #1b2639;
+  --border: rgba(151, 174, 215, 0.15);
+  --border-bright: rgba(109, 137, 255, 0.42);
+  --text: #f0f4ff;
+  --text-soft: #b5c0d7;
+  --muted: #7887a3;
+  --blue: #6885ff;
+  --blue-bright: #86a0ff;
+  --cyan: #41e4ed;
+  --purple: #a875ff;
+  --green: #35e6a1;
+  --red: #ff557d;
+  --orange: #ffb454;
+  --radius: 15px;
+  --radius-sm: 9px;
+  --shadow:
+    0 16px 40px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035);
+  --transition: 180ms ease;
+  --sidebar-width: 220px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+  scroll-behavior: smooth;
+  scroll-padding-top: 90px;
+  background: var(--bg);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(
+      ellipse at 18% 0%,
+      rgba(65, 100, 255, 0.12),
+      transparent 36%
+    ),
+    radial-gradient(
+      ellipse at 92% 14%,
+      rgba(144, 75, 255, 0.09),
+      transparent 32%
+    ),
+    var(--bg);
+  color: var(--text);
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  font-size: 14px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -webkit
